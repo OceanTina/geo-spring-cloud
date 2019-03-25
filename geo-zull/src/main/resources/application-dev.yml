@@ -1,0 +1,40 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.88.200:8761/eureka/
+server:
+  port: 8766
+spring:
+  application:
+    name: geo-zuul
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+zuul:
+  routes:
+    geoSpring:
+      path: /geoSpring/**
+      serviceId: geo-spring
+    communication:
+      path: /rabbitmq/**
+      serviceId: spirng-boot-rabbitmq
+    websocker:
+      path: /websocket/**
+      serviceId: geo-spring-websocket
+  host:
+    connect-timeout-millis: 1000000
+    socket-timeout-millis: 1000000
+
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 1000000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000  #设置API网关中路由转发请求的HystrixCommand执行超时时间
